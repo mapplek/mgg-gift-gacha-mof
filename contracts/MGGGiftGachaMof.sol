@@ -116,24 +116,26 @@ contract MGGGiftGachaMof is
         payable
         onlyRole(ADMIN)
     {
+        uint256 balance = address(this).balance;
+
         // withdrawing for moms wallet
-        (bool mom, ) = payable(momsAddress).call{value: address(this).balance * 20 / 100}('');
+        (bool mom, ) = payable(momsAddress).call{value: balance * 20 / 100}('');
         require(mom);
 
         // withdrawing for dev wallet
-        (bool dev, ) = payable(devAddress).call{value: address(this).balance * 20 / 100}('');
+        (bool dev, ) = payable(devAddress).call{value: balance * 20 / 100}('');
         require(dev);
 
         // withdrawing for contributor's wallet
-        (bool cont1, ) = payable(contributorAddress1).call{value: address(this).balance * 20 / 100}('');
+        (bool cont1, ) = payable(contributorAddress1).call{value: balance * 20 / 100}('');
         require(cont1);
 
         // withdrawing for contributor's wallet
-        (bool cont2, ) = payable(contributorAddress2).call{value: address(this).balance * 20 / 100}('');
+        (bool cont2, ) = payable(contributorAddress2).call{value: balance * 20 / 100}('');
         require(cont2);
 
         // withdrawing for dao wallet remainder
-        (bool os, ) = payable(withdrawAddress).call{value: address(this).balance}('');
+        (bool os, ) = payable(withdrawAddress).call{value: balance * 20 / 100}('');
         require(os);
     }
 
