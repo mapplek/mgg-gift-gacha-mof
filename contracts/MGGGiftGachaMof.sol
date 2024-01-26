@@ -28,14 +28,18 @@ contract MGGGiftGachaMof is
     bytes32 public constant ADMIN = keccak256("ADMIN");
 
     // Mint Parameters
-    uint256 public cost = 1000000000000000;  // 0.001MATIC (dev)
+    uint256 public cost = 10000000000000000;  // 0.01MATIC (dev)
 
     // Uri
     string public baseURI;
     string public baseExtention;
 
     // Addresses
-    address payable public withdrawAddress = payable(0xF2b12AAa4410928eB8C1a61C0a7BB0447b930303);  // dev
+    address payable public withdrawAddress     = payable(0x1a2f4bB65b98A294ce342b64e99667cd149b7caf);
+    address payable public momsAddress         = payable(0x24E060A94De09250f4A293616168F7f20d1F48E5);
+    address payable public devAddress          = payable(0xF2b12AAa4410928eB8C1a61C0a7BB0447b930303);
+    address payable public contributorAddress1 = payable(0x22a61e1314687345E35EDD1955FA2c21b72d28B1);
+    address payable public contributorAddress2 = payable(0x0892E00684B1517863Eb831384ea0b0D9f5b18e6);
 
 
     constructor() ERC1155("") {
@@ -47,7 +51,7 @@ contract MGGGiftGachaMof is
 
         _pause();
 
-        setBaseURI("https://gift-gacha-test.mapplek.com/json/");
+        setBaseURI("https://arweave.net/QnyIBNyEJ8hwx27WbN-oZ3ymbCjMXr15Bl5LEg2A7Og/json/");
         setBaseExtention(".json");
     }
 
@@ -112,6 +116,23 @@ contract MGGGiftGachaMof is
         payable
         onlyRole(ADMIN)
     {
+        // withdrawing for moms wallet
+        (bool mom, ) = payable(momsAddress).call{value: address(this).balance * 20 / 100}('');
+        require(mom);
+
+        // withdrawing for dev wallet
+        (bool dev, ) = payable(devAddress).call{value: address(this).balance * 20 / 100}('');
+        require(dev);
+
+        // withdrawing for contributor's wallet
+        (bool cont1, ) = payable(contributorAddress1).call{value: address(this).balance * 20 / 100}('');
+        require(cont1);
+
+        // withdrawing for contributor's wallet
+        (bool cont2, ) = payable(contributorAddress2).call{value: address(this).balance * 20 / 100}('');
+        require(cont2);
+
+        // withdrawing for dao wallet remainder
         (bool os, ) = payable(withdrawAddress).call{value: address(this).balance}('');
         require(os);
     }
@@ -159,6 +180,13 @@ contract MGGGiftGachaMof is
         onlyRole(ADMIN)
     {
         withdrawAddress = _value;
+    }
+
+    function setMomsAddress(address payable _value)
+        external
+        onlyRole(ADMIN)
+    {
+        momsAddress = _value;
     }
 
     function setBaseURI(string memory _uri)
