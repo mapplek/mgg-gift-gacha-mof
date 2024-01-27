@@ -28,7 +28,7 @@ contract MGGGiftGachaMof is
     bytes32 public constant ADMIN = keccak256("ADMIN");
 
     // Mint Parameters
-    uint256 public cost = 10000000000000000;  // 0.01MATIC (dev)
+    uint256 public cost = 1000000000000000000;
 
     // Uri
     string public baseURI;
